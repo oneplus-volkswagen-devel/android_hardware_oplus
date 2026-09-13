@@ -133,6 +133,7 @@ genfscon sysfs /devices/platform/soc/8c0000.qcom,qupv3_2_geni_se/884000.i2c/i2c-
 genfscon sysfs /devices/platform/soc/8c0000.qcom,qupv3_2_geni_se/884000.i2c/i2c-8/8-0010/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/8c0000.qcom,qupv3_2_geni_se/884000.i2c/i2c-9/9-0010/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/8c0000.qcom,qupv3_2_geni_se/888000.spi/spi_master/spi1/spi1.0/wakeup u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/8c0000.qcom,qupv3_2_geni_se/89c000.i2c/i2c-15/15-006a/ufcs/ufcs/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/8c0000.qcom,qupv3_2_geni_se/89c000.i2c/i2c-15/15-006a/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/980000.i2c/i2c-0/0-003b/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/980000.i2c/i2c-7/7-003b/wakeup u:object_r:sysfs_wakeup:s0
@@ -249,6 +250,7 @@ genfscon sysfs /devices/platform/soc/soc:oplus,monitor/oplus_mms/error/wakeup u:
 genfscon sysfs /devices/platform/soc/soc:oplus,plc_charge/oplus_mms/plc/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/soc:oplus,pps_charge/oplus_mms/pps/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/soc:oplus,retention_charge/oplus_mms/retention/wakeup u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc/soc:oplus,reverse_charge/oplus_mms/reverse/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/soc:oplus,track-charge/track/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/soc:oplus,ufcs_charge/oplus_mms/ufcs/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/soc:oplus,ufcs_protocol/wakeup u:object_r:sysfs_wakeup:s0
