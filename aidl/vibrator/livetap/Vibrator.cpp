@@ -146,26 +146,70 @@ ndk::ScopedAStatus Vibrator::perform(Effect effect, EffectStrength es,
             break;
     }
 
-    uint8_t finalAmp = static_cast<uint8_t>(baseAmplitude * strengthFactor);
-    if (finalAmp < 1) finalAmp = 1;
+    int32_t strength = static_cast<int32_t>(strengthFactor * 100);
+    uint32_t prebakedId = 0x1000;
+    switch (effect) {
+        case Effect::TEXTURE_TICK:
+        case Effect::TICK:
+            prebakedId = 0x1000;
+            break;
+        case Effect::CLICK:
+            prebakedId = 0x1001;
+            break;
+        case Effect::HEAVY_CLICK:
+            prebakedId = 0x1002;
+            break;
+        case Effect::POP:
+            prebakedId = 0x1003;
+            break;
+        case Effect::THUD:
+            prebakedId = 0x1004;
+            break;
+        case Effect::DOUBLE_CLICK:
+            prebakedId = 0x1001;
+            break;
+        default:
+            prebakedId = 0x1001;
+            break;
+    }
 
     mAmplitudeSet = false;
-    si_vibra_setAmplitude(finalAmp);
+    int32_t ret = 0;
 
-    int32_t ret;
     if (effect == Effect::DOUBLE_CLICK) {
-        si_vibra_looper_on(5);
-        usleep(15 * 1000);
-        si_vibra_setAmplitude(finalAmp);
-        si_vibra_looper_on(5);
-        ret = duration;
-    } else {
-        ret = si_vibra_looper_on(duration);
-        if (ret < 0) {
-            ALOGE("LiveTap looper on failed: %d\n", ret);
-            return ndk::ScopedAStatus(AStatus_fromExceptionCode(EX_SERVICE_SPECIFIC));
+        ret = si_vibra_looper_prebaked_effect(0x1001, strength);
+        if (ret <= 0) {
+            uint8_t finalAmp = static_cast<uint8_t>(baseAmplitude * strengthFactor);
+            if (finalAmp < 1) finalAmp = 1;
+            si_vibra_setAmplitude(finalAmp);
+            si_vibra_looper_on(10);
+            usleep(40 * 1000);
+            si_vibra_looper_on(10);
+            ret = 60;
+        } else {
+            usleep(40 * 1000);
+            si_vibra_looper_prebaked_effect(0x1001, strength);
+            ret = ret + 40 + ret;
         }
-        ret = duration;
+    } else {
+        ret = si_vibra_looper_prebaked_effect(prebakedId, strength);
+        if (ret <= 0) {
+            uint8_t finalAmp = static_cast<uint8_t>(baseAmplitude * strengthFactor);
+            if (finalAmp < 1) finalAmp = 1;
+            si_vibra_setAmplitude(finalAmp);
+            uint32_t playDuration = duration;
+            if (effect == Effect::TICK || effect == Effect::TEXTURE_TICK) {
+                playDuration = 10;
+                finalAmp = static_cast<uint8_t>(65 * strengthFactor);
+                si_vibra_setAmplitude(finalAmp);
+            }
+            int32_t onRet = si_vibra_looper_on(playDuration);
+            if (onRet < 0) {
+                ALOGE("LiveTap looper on failed: %d\n", onRet);
+                return ndk::ScopedAStatus(AStatus_fromExceptionCode(EX_SERVICE_SPECIFIC));
+            }
+            ret = playDuration;
+        }
     }
 
     if (callback != nullptr) {
