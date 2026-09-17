@@ -21,17 +21,10 @@ cc_binary {
         "Vibrator.cpp",
     ],
     shared_libs: [
-        "libcutils",
         "libutils",
         "liblog",
         "libbase",
         "libbinder_ndk",
-        "libsivibrator",
         "android.hardware.vibrator-V2-ndk",
     ],
-}
-
-cc_library_shared {
-    name: "libsivibrator",
-    soc_specific: true,
 }

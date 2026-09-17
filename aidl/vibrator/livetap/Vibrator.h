@@ -7,6 +7,11 @@
 
 #include <aidl/android/hardware/vibrator/BnVibrator.h>
 
+#include <atomic>
+#include <mutex>
+#include <string>
+#include <vector>
+
 namespace aidl {
 namespace android {
 namespace hardware {
@@ -48,7 +53,18 @@ class Vibrator : public BnVibrator {
                                    const std::shared_ptr<IVibratorCallback>& callback) override;
 
   private:
+    static std::string lookupPath(const std::vector<std::string>& candidates);
+    static bool writeValue(const std::string& path, int32_t value);
+    int32_t playEffect(uint32_t durationMs, uint8_t amplitude);
+
+    bool mReady = false;
     bool mAmplitudeSet = false;
+    int32_t mF0 = 0;
+    std::string mDurationPath;
+    std::string mActivatePath;
+    std::string mVmaxPath;
+    std::mutex mMutex;
+    std::atomic<uint32_t> mGeneration = 0;
 };
 
 }  // namespace vibrator
